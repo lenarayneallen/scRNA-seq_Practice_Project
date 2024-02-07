@@ -26,7 +26,7 @@ library(SingleCellExperiment)
 library(BPCells)
 library(ggsci)
 
-#PREPROCESSING ------------------------------------------
+###PREPROCESSING FOR SingleR ------------------------------------------
 #load in reference genome
 ref <- celldex::HumanPrimaryCellAtlasData(ensembl = TRUE)
 View(as.data.frame(colData(ref)))
@@ -71,6 +71,7 @@ counts_list = c(data.1.1.mat, data.2.2.mat, data.3.3.mat, data.4.4.mat,
 joined_object <- CreateSeuratObject(counts = counts_list, 
                                     meta.data = integrated_clustered@meta.data,
                                     project = "ZHANG")
+
 #joining layers
 joined_object <- JoinLayers(joined_object)
 
@@ -79,9 +80,8 @@ joined_object[["RNA"]]$counts <- as(object = joined_object[["RNA"]]$counts, Clas
 
 #getting counts
 counts <- GetAssayData(joined_object, layer = 'counts')
-gc()
-#ensure counts and reference both use ensembl IDs so that SingleR will work properly
 
+#ensure counts and reference both use ensembl IDs so that SingleR will work properly
 require(EnsDb.Hsapiens.v86)
 ens <- mapIds(EnsDb.Hsapiens.v86,
               keys = rownames(counts),
@@ -103,7 +103,7 @@ predictions <- SingleR(test = counts,
 
 saveRDS(predictions, file = "predictions_norm.RDS")
 
-#add single R cell identity predictions (single cell level) back to original integrated Seurat object
+#add SingleR cell identity predictions (single cell level) back to original integrated Seurat object
 predictions_norm <- readRDS("predictions_norm.RDS")
 integrated_clustered$singleR.labels <- predictions_norm$labels[match(rownames(integrated_clustered@meta.data), rownames(predictions_norm))]
 
@@ -111,27 +111,28 @@ saveRDS(integrated_clustered, 'int_clust_norm_singleR.RDS')
 
 
 
-#run singleR at the CLUSTER level
+#run SingleR at the CLUSTER level
 predictions_by_cluster <- SingleR(test = counts, 
                                   ref = ref,
                                   labels = ref$label.main,
-                                  clusters = joined_object@meta.data[["integrated_snn_res.0.8.x"]])
+                                  clusters = joined_object@meta.data[["integrated_snn_res.0.8"]])
 
 saveRDS(predictions_by_cluster, file = "predictions_by_cluster.RDS")
 
-#add single R cell identity predictions (cluster level) back to joined Seurat object
-joined_object[["SingleR.cluster.labels"]] <- predictions_by_cluster$labels[match(joined_object[[]][["integrated_snn_res.0.8.x"]], rownames(predictions_by_cluster))]
+#add SingleR cell identity predictions (cluster level) back to joined Seurat object
+joined_object[["SingleR.cluster.labels"]] <- predictions_by_cluster$labels[match(joined_object[[]][["integrated_snn_res.0.8"]], rownames(predictions_by_cluster))]
 
 
-#add single R cell identity predictions (cluster level) back to integrated object
+#add SingleR cell identity predictions (cluster level) back to integrated object
 integrated_clustered$backup.rownames <- row.names(integrated_clustered@meta.data)
 integrated_clustered@meta.data <- base::merge(integrated_clustered@meta.data, joined_object@meta.data, by = "row.names")
 row.names(integrated_clustered@meta.data) <- integrated_clustered$Row.names
-saveRDS(integrated_clustered, 'int_norm_singleR_bycluster.RDS')
+
+saveRDS(integrated_clustered, 'integrated_clustered_final.RDS')
 
 
 
-#PLOTTING ----------------------------------
+###PLOTTING SingleR RESULTS ----------------------------------
 #by single cell
 #plot UMAP grouping by singleR predictions at single cell resolution
 DimPlot(integrated_clustered, reduction = 'umap', group.by = 'singleR.labels') +
@@ -150,4 +151,3 @@ ggplot(integrated_clustered@meta.data, aes(x = integrated_snn_res.0.8.x, fill = 
 DimPlot(integrated_clustered, reduction = 'umap', group.by = 'SingleR.cluster.labels') +
   ggtitle("SingleR predicted identities by cluster")
   
-
