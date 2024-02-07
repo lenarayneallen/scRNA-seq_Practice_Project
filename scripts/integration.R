@@ -20,7 +20,7 @@ library(ensembldb)
 library(BPCells)
 library(rcartocolor)
 
-### PROCESSING MERGED OBJECT FOR INTEGRATION -----------------
+### PROCESSING MERGED OBJECT FOR INTEGRATION -------------------------------------------
 #read in merged object
 merged <- readRDS("merged.rds")
 
@@ -59,23 +59,22 @@ for(i in 1:length(objects_split)){
 }
 
 
-###INTEGRATION & CLUSTERING---------------------------------
+###INTEGRATION & CLUSTERING-------------------------------------------------------------
 #choose top 2000 variable features for integration
 features <- SelectIntegrationFeatures(object.list = objects_split)
 
 #find integration anchors
 anchors <- FindIntegrationAnchors(object.list = objects_split,
-                                  anchor.features = features)
+                                 anchor.features = features)
+#save anchors for future use/convenience
 saveRDS(anchors, 'anchors.rds')
 saveRDS(objects_split, 'split.rds')
 
-#save annchors for future use/convenience
-anchors <- readRDS('anchors.rds')
 
 #integrate and save integrated object
 integrated <- IntegrateData(anchorset = anchors)
 saveRDS(integrated, 'integrated.rds')
-integrated <- readRDS('integrated.rds')
+
 
 #re-run preprocessing steps
 integrated <- ScaleData(object = integrated)
@@ -87,13 +86,12 @@ integrated <- FindNeighbors(object = integrated, dims = 1:30)
 integrated <- FindClusters(object = integrated, 
                            resolution = c(0.4, 0.6, 0.8, 1.0, 1.4))
 
+#save integrated and clustered object
 saveRDS(integrated,'integrated_clustered.rds')
 Idents(object = integrated) <- "integrated_snn_res.0.8"
 
 
-
-###CLUSTRING QUALITY CONTROL & VISUALIZATION----------------
-
+###CLUSTRING QUALITY CONTROL & VISUALIZATION--------------------------------------------
 #visualize clusters on integrated dataset
 print(DimPlot(integrated, 
               reduction = "umap", 
@@ -105,7 +103,8 @@ integrated_per_cluster_per_sample <- DimPlot(integrated,
                           label = TRUE, 
                           split.by = "sample", 
                           ncol = 4) + NoLegend()
-print(per_cluster_per_sample)
+
+print(integrated_per_cluster_per_sample)
 
 
 #UMAP visualization
@@ -145,7 +144,7 @@ allmarkers.annotated <- left_join(x = allmarkers, y = unique(annotations[, c("ge
                                   by = c("gene" = "gene_name"))
 
 #create separate dataframes for each cluster containing top 20 genes
-#compare top 20 genes to Pangglao DB
+#compare top 20 genes to Panglao DB
 for(i in 0:23){
   x <- allmarkers.annotated[allmarkers.annotated$cluster == i,]
   x <- top_n(x,
