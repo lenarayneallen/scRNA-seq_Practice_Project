@@ -12,7 +12,7 @@ library(remotes)
 library(ggplot2)
 library(patchwork)
 
-#read in counts ---------------------------------------------------------------
+###read in counts ---------------------------------------------------------------
 E1_YF <- ReadMtx(mtx = "GSM5910784_Case1-YF_matrix.mtx.gz",
                        features = "GSM5910784_Case1-YF_features.tsv.gz",
                        cells = "GSM5910784_Case1-YF_barcodes.tsv.gz")
@@ -53,7 +53,7 @@ sample_names <-c('E1_YF', 'E1_ZY', 'E2_YF', 'E2_ZY', 'E2_ZC', 'E3_YF', 'E3_ZY', 
 options(Seurat.object.assay.version = "v3")
 seurat_objects <- list()
 
-#create seurat objects ---------------------------------------------------------
+###create seurat objects ---------------------------------------------------------
 for (count in counts_list){
   seurat_object <- CreateSeuratObject(count)
   seurat_objects <- append(seurat_objects, seurat_object) 
@@ -62,7 +62,7 @@ names(seurat_objects) <- c('E1_YF_ser', 'E1_ZY_ser', 'E2_YF_ser', 'E2_ZY_ser', '
 
 
 
-#initial filtering--------------------------------------------------------------
+###initial filtering--------------------------------------------------------------
 filtered_objects <- list()
 
 for (seurat_obj in seurat_objects){
@@ -91,7 +91,7 @@ E4_ZY_fil <- filtered_objects[[8]]
 
 fils <- list(E1_YF_fil, E1_ZY_fil, E2_YF_fil, E2_ZY_fil, E2_ZC_fil, E3_YF_fil, E3_ZY_fil, E4_ZY_fil)
 
-#doubletfinder------------------------------------------------------------------
+###doubletfinder------------------------------------------------------------------
 #pre-process data
 pp_objects <- list()
 for (object in fils){
@@ -119,7 +119,7 @@ E4_ZY_pp <- pp_objects[[8]]
 
 pps <- c(E1_YF_pp, E1_ZY_pp, E2_YF_pp, E2_ZY_pp, E2_ZC_pp, E3_YF_pp, E3_ZY_pp, E4_ZY_pp)
 
-#identify pK
+#identify pK value for doubletfinder
 pK_list <- c()
 for (object in pp_objects){
   #estimate pK value for each object/sample (no ground truth method)
@@ -244,7 +244,8 @@ for (i in 1:8){
 
 singlets <- list(E1_YF_singlets, E1_ZY_singlets, E2_YF_singlets, E2_ZY_singlets, E2_ZC_singlets, E3_YF_singlets, E3_ZY_singlets, E4_ZY_singlets)
 
-#selecting only singlets from original filtered but NOT PRE PROCESSED Seurat object
+#selecting only singlets from original filtered but NOT PRE-PROCESSED Seurat object
+#this is because 
 for (i in 1:8){
   sing_obj <- singlets[[i]]
   fil_obj <- fils[[i]]
