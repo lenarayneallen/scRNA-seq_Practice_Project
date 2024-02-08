@@ -72,8 +72,25 @@ _**Clustering**_
   
 ![int_umap_by_patient](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/b93ca81d-42c3-40f8-8705-fe17e0d84338)
 
+_**Marker Identification**_
+- I used the FindAllMarkers() function to identify the top 20 markers for each cluster. I annotated these markers using AnnotationHub and explored these markers using PanglaoDB.
 
 ### SingleR:
+- Here my analysis branches from that of the authors; whereas the authors did not employ this tool, I decided to utilize SingleR for reference-based annotation.
+- I utilized the HumanPrimaryCellAtlasData as a reference
+- SingleR can provide cell-wise (default) or cluster-wise annotation. I generated SingleR predictions using both of these methods:
+  - cluster-wise annotation (faster!):
+   ![singler_pred_ids_by_cluster](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/50b68000-78d4-4d14-bf90-be059495c4a0)
 
+  - single-cell-wise annotation:
+![singleR_pred_by_cell](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/d47c15e4-80cc-4954-b3df-87b9248ea44e)
+
+- Ultimately, I found the single-cell-wise resolution to be the most informative and nuanced; to understand the most prevalent cell types in each cluster, I generated a bar plot showing the proportion of SingleR-identified cell types in each cluster:
+- ![singleRlabels_per_cluster_cellwise](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/88e75780-e0f6-494c-abf2-bad837fa0903)
 
 ### Annotation and visualization:
+- I noticed that while mostly representative of the author's findings, SingleR did not identify a few cell types that were identified by the authors (mast cells, ductal cells, MKI67+ ductal cells, acinar cells, fibroblasts, and plasma cells). In turn, SingleR identified some cell types that were not observed in the author's figure (Tissue Stem Cells, Neutrophils, Epithelial Cells, CMPs).
+- To see if I could identify the groups noted by the authors but not by singleR, I generated feature plots of known markers for those groups:
+- INSERT FEATURE PLOTS HERE
+- Informed by these feature plots and the Single-R annotations, I assigned cluster identities as indicated in the below figure. It is important to note that this annotation is a guesstimate on my part. I understand that I am "working backwards" by doing looking specifically for markers of cell populations already identified by the authors, but I wanted to attempt it as an exercise nonetheless.
+- ![clustered_IDS_FINALLLL](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/9da149c5-5ad7-4829-a524-061cd02ab3b1)
