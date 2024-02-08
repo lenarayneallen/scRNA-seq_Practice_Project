@@ -115,7 +115,7 @@ print(int_umap_by_patient)
 
 ###FINDING MARKERS & PRE-ANNOTATION------------------------------
 #finding all markers
-markers <- Find(object = integrated, 
+markers <- FindAllMarkers(object = integrated, 
                           only.pos = TRUE,
                           logfc.threshold = 0.25)
 saveRDS(markers, 'all_markers.rds')
