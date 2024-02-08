@@ -7,7 +7,12 @@ Zhang, S., Fang, W., Zhou, S. et al. Single cell transcriptomic analyses implica
 
 
 ## Introduction:
-Here I will provide an overview of this scRNA-seq analysis, attempt to explain my methodology, and compare my results to those of the authors. As I am a beginner (and I have not been able to consult anyone with more knowledge on the subject for help), I understand that some of the steps that I have taken may not be considered “best practices”; this analysis is exclusively a learning exercise and should not be taken as instructional materials. 
+Here I will provide an overview of this scRNA-seq analysis, attempt to explain my methodology, and compare my results to those of the authors. As I am a beginner (and I have not been able to consult anyone with more knowledge on the subject for help),  some of the steps that I have taken may not be considered “best practices”; this analysis is exclusively a learning exercise and should not be taken as instructional materials. 
+
+## Experimental Background: 
+In this study, the authors sought to understand the cellular composition and microenvironment of primary Pancreatic Ductal Adenocarcinoma (PDAC) tumors and PDAC hepatic metastases through the use of scRNA-seq. Eight clinical samples from four patients were analyzed, and the samples derived from each patient are as follows:
+![image](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/5cb378fb-3477-4305-88ee-7ff39aa5802c)
+
 
 
 ## Author's analysis methods:
@@ -21,11 +26,6 @@ For comparison purposes, here are the methods as described in the Zhang et al. p
 
 ### "_Identification of signature genes_"
 "_We applied the ‘FindAllMarkers’ function in Seurat to identify specific genes for each cell subset. For the selection of marker genes specific to each cell cluster/subset, we calculated the log2 fold change (log2FC) between two groups (a cell cluster/subset vs. other cells) using the ‘FindMarkers’ function with the Wilcoxon rank-sum test (default parameters)._"
-
-
-## Experimental Background: 
-
-
 
 ## My analysis:
 ### Pre-processing and merging:
@@ -65,11 +65,11 @@ _**Clustering**_
 
   - _Grouped by sample:_
 
-![int_umap_by_sample](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/cfcc2d56-b8ad-481a-9665-1dab8bffe73c)
+    ![int_umap_by_sample](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/cfcc2d56-b8ad-481a-9665-1dab8bffe73c)
 
   - _Grouped by patient:_
   
-![int_umap_by_patient](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/b93ca81d-42c3-40f8-8705-fe17e0d84338)
+    ![int_umap_by_patient](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/b93ca81d-42c3-40f8-8705-fe17e0d84338)
 
 _**Marker Identification**_
 - I used the FindAllMarkers() function to identify the top 20 markers for each cluster. I annotated these markers using AnnotationHub and explored these markers using PanglaoDB.
@@ -90,26 +90,41 @@ _**Marker Identification**_
 ### Annotation and visualization:
 - I noticed that while mostly representative of the author's findings, SingleR did not identify a few cell types that were identified by the authors (mast cells, ductal cells, MKI67+ ductal cells, acinar cells, endocrine cells, fibroblasts, and plasma cells). In turn, SingleR identified some cell types that were not observed in the author's figure (Tissue Stem Cells, Neutrophils, Epithelial Cells, CMPs).
 - To see if I could identify the groups noted by the authors but not by singleR, I generated feature plots of known markers for those groups:
-- _Ductal cell and MKI67 ductal cell markers_
-![DUCTAL_MARKERS](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/c4e8a609-2b1f-41e3-a442-7bbb4e5cc0f0)
-- _Mast cell markers_
-![MASTCELL_MARKERS](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/70bb922d-2416-4eb5-96a6-8c6eb904b557)
-- _Acinar and Endocrine Markers_
-![ACINAR_MARKERS](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/9c248066-a71c-4606-9746-7aa87f08a779)
-![ENDOCRINE](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/d281eb9d-f3af-400a-b9a6-94acddf26ea9)
-- _Plasma cell markers_
-![plasma_MZB1_final](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/377c121a-08d4-4397-910c-afc35a4d7a01)
-- _Fibroblast markers_
-![fibroblasts_COL1A1_final](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/ec3c055d-ffd1-491f-82fe-0d4ce034fdca)
+    - _Ductal cell and MKI67 ductal cell markers_
+    ![DUCTAL_MARKERS](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/c4e8a609-2b1f-41e3-a442-7bbb4e5cc0f0)
+    - _Mast cell markers_
+    ![MASTCELL_MARKERS](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/70bb922d-2416-4eb5-96a6-8c6eb904b557)
+    - _Acinar and Endocrine Markers_
+    ![ACINAR_MARKERS](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/9c248066-a71c-4606-9746-7aa87f08a779)
+    ![ENDOCRINE](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/d281eb9d-f3af-400a-b9a6-94acddf26ea9)
+    - _Plasma cell markers_
+    ![plasma_MZB1_final](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/377c121a-08d4-4397-910c-afc35a4d7a01)
+    - _Fibroblast markers_
+    ![fibroblasts_COL1A1_final](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/ec3c055d-ffd1-491f-82fe-0d4ce034fdca)
 
-- Starting with the Single-R annotations and making adjustments based off of the feature plots above, I assigned cluster identities as indicated in the below figure. It is important to note that this annotation is a guesstimate on my part. I understand that I am "working backwards" by looking specifically for markers of cell populations already identified by the authors, but I wanted to attempt it as an exercise nonetheless. 
+- Starting with the Single-R annotations and making adjustments based off of the feature plots above, I assigned cluster identities as indicated in the below figure. It is important to note that this annotation is a guesstimate on my part. I understand that I am "working backwards" by looking specifically for markers of cell populations already identified by the authors, and that my annotation process was not particularly systematic, but I wanted to attempt it as an exercise nonetheless. 
 ![acinarendocrine](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/301b1dd6-7dc3-459e-97b3-a7d4dfd6c231)
 
 - Here is my final annotated plot compared to that of the authors (Zhang et al. Figure 1C):
 ![ductal cell markers (2)](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/e83f4724-08db-4500-aa82-e52a78f0cbdd)
 
-- From here, I was able to loosley recreate a bar plot from the paper (Zhang et al. Figure 1E) examining the abundance of each cell type by sample condition:
-![celltypeAbundanceByCondititionFinal](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/0338f327-6d08-4320-b366-78baadeb1002)
-![ductal cell markers (3)](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/9154a2ad-eced-4854-a1e1-8094344f85dc)
+- From here, I was able to loosley recreate a bar plot from the paper (Zhang et al. Figure 1E) examining the abundance of each cell type by sample condition. Error bars for the pancreatic tumor (PT) and hepatic metastasis (HM) conditions represent the standard error of the mean; there are no error bars for the normal tissue (NT) condition as there is only one normal tissue sample. 
+
+  <img src="https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/abb2dfa8-7531-4ad1-b665-37f0c4fbe27b" width=60% height=60%>
+  <img src="https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/a89a669c-416e-470d-a3a3-b1d4725e2348" width=30% height=30%> 
+
+- While I am unsure of their statistical significance, several trends observed in my plot are consistent with the authors' plot. These trends include:
+  - increased abundance of acinar and endocrine cells (termed "secretory cells" in the paper) in the NT sample compared to the PT and HM samples
+  - increased abundance of plasma cells in PT samples compared to HM samples
+  - a lack of MKI67 cells in the NT sample
+  - increased abundance of macrophage/monocyte cells in HM sample compared to the PT and NT samples
+  - increased abundance of fibroblasts in PT samples compared to the HM and NT samples
+
+- Despite these trends, some aspects of my results indicate that my analysis is in some way flawed. Notably, there is some presence of acinar/endocrine cells in the hepatic metastases according to my analysis. As acinar and endocrine cells are pancreatic tissue cells, they should theoretically not exist in the hepatic metastases. Furthermore, the authors did not identify acinar or endocrine cells in the hepatic metastases. This tells me that I likely misidentified the acinar/endocrine cluster as cluster 5; though this identification was made based on the feature plots of known acinar and endocrine marker genes (pictured above), these genes mapped onto cluster 5 relatively loosely.
+
+- I was also able to create a stacked bar plot representing the cell type composition of each sample type:
+  ![Cell Type PERC per Sample Condition FINAL](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/54db39cc-e2a0-4bd0-a49d-a37f980a9e15)
+
+
 
 
