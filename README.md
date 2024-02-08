@@ -60,15 +60,14 @@ _**Clustering**_
 ![post_integration_final](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/e4d05198-a84d-4c21-9239-8a4b49eae362)
 
 - To assess for bias before proceeding with marker identification, I then visualized the integrated and clustered UMAP above in a variety of different ways:
+  - _Split by sample:_
+![int_per_cluster_per_sample](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/369988e5-4501-4cc9-9f61-444b7204cc1c)
 
-  _split by sample_
-  ![int_per_cluster_per_sample](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/369988e5-4501-4cc9-9f61-444b7204cc1c)
+  - _Grouped by sample:_
 
-  _grouped by sample_
+![int_umap_by_sample](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/cfcc2d56-b8ad-481a-9665-1dab8bffe73c)
 
-  ![int_umap_by_sample](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/cfcc2d56-b8ad-481a-9665-1dab8bffe73c)
-
-  _grouped by patient_
+  - _Grouped by patient:_
   
 ![int_umap_by_patient](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/b93ca81d-42c3-40f8-8705-fe17e0d84338)
 
@@ -79,18 +78,38 @@ _**Marker Identification**_
 - Here my analysis branches from that of the authors; whereas the authors did not employ this tool, I decided to utilize SingleR for reference-based annotation.
 - I utilized the HumanPrimaryCellAtlasData as a reference
 - SingleR can provide cell-wise (default) or cluster-wise annotation. I generated SingleR predictions using both of these methods:
-  - cluster-wise annotation (faster!):
+  - Cluster-wise annotation (faster!):
    ![singler_pred_ids_by_cluster](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/50b68000-78d4-4d14-bf90-be059495c4a0)
 
-  - single-cell-wise annotation:
+  - Single-cell-wise annotation:
 ![singleR_pred_by_cell](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/d47c15e4-80cc-4954-b3df-87b9248ea44e)
 
 - Ultimately, I found the single-cell-wise resolution to be the most informative and nuanced; to understand the most prevalent cell types in each cluster, I generated a bar plot showing the proportion of SingleR-identified cell types in each cluster:
-- ![singleRlabels_per_cluster_cellwise](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/88e75780-e0f6-494c-abf2-bad837fa0903)
+![singleRlabels_per_cluster_cellwise](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/88e75780-e0f6-494c-abf2-bad837fa0903)
 
 ### Annotation and visualization:
-- I noticed that while mostly representative of the author's findings, SingleR did not identify a few cell types that were identified by the authors (mast cells, ductal cells, MKI67+ ductal cells, acinar cells, fibroblasts, and plasma cells). In turn, SingleR identified some cell types that were not observed in the author's figure (Tissue Stem Cells, Neutrophils, Epithelial Cells, CMPs).
+- I noticed that while mostly representative of the author's findings, SingleR did not identify a few cell types that were identified by the authors (mast cells, ductal cells, MKI67+ ductal cells, acinar cells, endocrine cells, fibroblasts, and plasma cells). In turn, SingleR identified some cell types that were not observed in the author's figure (Tissue Stem Cells, Neutrophils, Epithelial Cells, CMPs).
 - To see if I could identify the groups noted by the authors but not by singleR, I generated feature plots of known markers for those groups:
-- INSERT FEATURE PLOTS HERE
-- Informed by these feature plots and the Single-R annotations, I assigned cluster identities as indicated in the below figure. It is important to note that this annotation is a guesstimate on my part. I understand that I am "working backwards" by doing looking specifically for markers of cell populations already identified by the authors, but I wanted to attempt it as an exercise nonetheless.
-- ![clustered_IDS_FINALLLL](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/9da149c5-5ad7-4829-a524-061cd02ab3b1)
+- _Ductal cell and MKI67 ductal cell markers_
+![DUCTAL_MARKERS](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/c4e8a609-2b1f-41e3-a442-7bbb4e5cc0f0)
+- _Mast cell markers_
+![MASTCELL_MARKERS](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/70bb922d-2416-4eb5-96a6-8c6eb904b557)
+- _Acinar and Endocrine Markers_
+![ACINAR_MARKERS](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/9c248066-a71c-4606-9746-7aa87f08a779)
+![ENDOCRINE](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/d281eb9d-f3af-400a-b9a6-94acddf26ea9)
+- _Plasma cell markers_
+![plasma_MZB1_final](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/377c121a-08d4-4397-910c-afc35a4d7a01)
+- _Fibroblast markers_
+![fibroblasts_COL1A1_final](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/ec3c055d-ffd1-491f-82fe-0d4ce034fdca)
+
+- Starting with the Single-R annotations and making adjustments based off of the feature plots above, I assigned cluster identities as indicated in the below figure. It is important to note that this annotation is a guesstimate on my part. I understand that I am "working backwards" by looking specifically for markers of cell populations already identified by the authors, but I wanted to attempt it as an exercise nonetheless. 
+![acinarendocrine](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/301b1dd6-7dc3-459e-97b3-a7d4dfd6c231)
+
+- Here is my final annotated plot compared to that of the authors (Zhang et al. Figure 1C):
+![ductal cell markers (2)](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/e83f4724-08db-4500-aa82-e52a78f0cbdd)
+
+- From here, I was able to loosley recreate a bar plot from the paper (Zhang et al. Figure 1E) examining the abundance of each cell type by sample condition:
+![celltypeAbundanceByCondititionFinal](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/0338f327-6d08-4320-b366-78baadeb1002)
+![ductal cell markers (3)](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/9154a2ad-eced-4854-a1e1-8094344f85dc)
+
+
