@@ -11,6 +11,7 @@ Here I will provide an overview of this scRNA-seq analysis, attempt to explain m
 
 ## Experimental Background: 
 In this study, the authors sought to understand the cellular composition and microenvironment of primary Pancreatic Ductal Adenocarcinoma (PDAC) tumors and PDAC hepatic metastases through the use of scRNA-seq. Eight clinical samples from four patients were analyzed, and the samples derived from each patient are as follows:
+
 ![image](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/5cb378fb-3477-4305-88ee-7ff39aa5802c)
 
 
