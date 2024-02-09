@@ -109,7 +109,7 @@ _**Marker Identification**_
 - Here is my final annotated plot compared to that of the authors (Zhang et al. Figure 1C):
 ![ductal cell markers (2)](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/e83f4724-08db-4500-aa82-e52a78f0cbdd)
 
-- From here, I was able to loosley recreate a bar plot from the paper (Zhang et al. Figure 1E) examining the abundance of each cell type by sample condition. Error bars for the pancreatic tumor (PT) and hepatic metastasis (HM) conditions represent the standard error of the mean; there are no error bars for the normal tissue (NT) condition as there is only one normal tissue sample. 
+- From here, I was able to loosely recreate a bar plot from the paper (Zhang et al. Figure 1E) examining the abundance of each cell type by sample condition. Error bars for the pancreatic tumor (PT) and hepatic metastasis (HM) conditions represent the standard error of the mean; there are no error bars for the normal tissue (NT) condition as there is only one normal tissue sample. 
 
   <img src="https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/abb2dfa8-7531-4ad1-b665-37f0c4fbe27b" width=60% height=60%>
   <img src="https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/a89a669c-416e-470d-a3a3-b1d4725e2348" width=30% height=30%> 
