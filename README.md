@@ -9,11 +9,12 @@ Zhang, S., Fang, W., Zhou, S. et al. Single cell transcriptomic analyses implica
 ## Introduction:
 Here I will provide an overview of this scRNA-seq analysis, attempt to explain my methodology, and compare my results to those of the authors. As I am a beginner (and I have not been able to consult anyone with more knowledge on the subject for help),  some of the steps that I have taken may not be considered “best practices”; this analysis is exclusively a learning exercise and should not be taken as instructional materials. 
 
+The data files used for this project are available for download through the Gene Expression Omnibus at the following link: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE197177
+
 ## Experimental Background: 
 In this study, the authors sought to understand the cellular composition and microenvironment of primary Pancreatic Ductal Adenocarcinoma (PDAC) tumors and PDAC hepatic metastases through the use of scRNA-seq. Eight clinical samples from four patients were analyzed, and the samples derived from each patient are as follows:
 
 ![image](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/5cb378fb-3477-4305-88ee-7ff39aa5802c)
-
 
 
 ## Author's analysis methods:
@@ -48,7 +49,7 @@ _**Doubletfinder**_
 
 _**Merging**_
 - After running doubletfinder, I then merged the seurat objects for each individual sample into one seurat object.
-  
+---
 ### Integration and clustering:
 _**Integration**_
 - To prepare for integration, I re-ran the standard pre-processing workflow as defined above. I visualized the UMAP plots of the object, grouping by patient, sample, and sample type to assess for any bias, and I split the merged seurat object into layers by sample.
@@ -74,7 +75,7 @@ _**Clustering**_
 
 _**Marker Identification**_
 - I used the FindAllMarkers() function to identify the top 20 markers for each cluster. I annotated these markers using AnnotationHub and explored these markers using PanglaoDB.
-
+---
 ### SingleR:
 - Here my analysis branches from that of the authors; whereas the authors did not employ this tool, I decided to utilize SingleR for reference-based annotation.
 - I utilized the HumanPrimaryCellAtlasData as a reference
@@ -87,7 +88,7 @@ _**Marker Identification**_
 
 - Ultimately, I found the single-cell-wise resolution to be the most informative and nuanced; to understand the most prevalent cell types in each cluster, I generated a bar plot showing the proportion of SingleR-identified cell types in each cluster:
 ![singleRlabels_per_cluster_cellwise](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/88e75780-e0f6-494c-abf2-bad837fa0903)
-
+---
 ### Annotation and visualization:
 - I noticed that while mostly representative of the author's findings, SingleR did not identify a few cell types that were identified by the authors (mast cells, ductal cells, MKI67+ ductal cells, acinar cells, endocrine cells, fibroblasts, and plasma cells). In turn, SingleR identified some cell types that were not observed in the author's figure (Tissue Stem Cells, Neutrophils, Epithelial Cells, CMPs).
 - To see if I could identify the groups noted by the authors but not by singleR, I generated feature plots of known markers for those groups:
@@ -126,6 +127,8 @@ _**Marker Identification**_
 - I was also able to create a stacked bar plot representing the cell type composition of each sample type:
   ![Cell Type PERC per Sample Condition FINAL](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/54db39cc-e2a0-4bd0-a49d-a37f980a9e15)
 
-
+## Future Directions:
+- With more time to work on this project, I would ideally like to hone in on a more accurate cluster designation for the acinar and endocrine cell types. To do this, I would initially repeat the same annotation process with the cells clustered at other resolutions that yield more than 23 clusters.
+- I would also like to eventually repeat the author's analysis of cancer associated fibroblasts in the hepatic metastasis microenvironment (Zhang et al. Figure 4).
 
 
