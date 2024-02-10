@@ -17,7 +17,7 @@ In this study, the authors sought to understand the cellular composition and mic
 
 ![image](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/5cb378fb-3477-4305-88ee-7ff39aa5802c)
 
-PDAC is a particularly immune evasive cancer, and it is often not responsive to the immune checkpoint inhibitor therapies that have been effective in many other cancer types. The 5-year survival rate is low, often estimated at less than 10%, and resection is often the only curative option. It is often diagnosed at a state of significant disease progression, with paitents often presenting with liver metastasis at the time of diagnosis. 
+PDAC is a particularly immune evasive cancer, and it is often not responsive to the immune checkpoint inhibitor therapies that have been effective in many other cancer types. The 5-year survival rate is low, often estimated at less than 10%, and resection is often the only curative option. It is often diagnosed at a state of significant disease progression, with patients often presenting with liver metastasis at the time of diagnosis. 
 
 Sources:
 
@@ -40,27 +40,27 @@ For comparison purposes, here are the methods as described in the Zhang et al. p
 ## My analysis:
 ### Pre-processing and merging:
 _**Creating the Seurat Object**_
-- After reading in my counts matrices and creating the seurat objects for each sample, I oriented myself with the structure of the objects. It was immediately important to understand the differences between nFeature_RNA and nCount_RNA. Whereas nFeature_RNA provides the number of unique genes per individual cell, nCount_RNA provides the number of total molecules per individual cell. 
+- After reading in my counts matrices and creating the Seurat objects for each sample, I oriented myself with the structure of the objects. It was immediately important to understand the differences between nFeature_RNA and nCount_RNA. Whereas nFeature_RNA provides the number of unique genes per individual cell, nCount_RNA provides the number of total molecules per individual cell. 
 - Once I created the object, I filtered out cells expressing a percentage of mitochondrial genes greater than 20% and cells expressing less than 200 features (genes). This helps to remove cells that are low quality or may be dying.
-- I then pre-processed each individual seurat object with the standard seurat pre-processing workflow. I created a new pre-processed object for each sample while retaining the filtered and unprocessed object for later use after running doubletfinder. 
+- I then pre-processed each individual Seurat object with the standard Seurat pre-processing workflow. I created a new pre-processed object for each sample while retaining the filtered and unprocessed object for later use after running doubletfinder. 
 
 _**Doubletfinder**_
 
-- Like the authors, I utilized a tool called doubletfinder to identify and remove potential doublets from my seurat objects. Doublets are artifacts created when two cells are erroneously sequenced in a single reaction and thus counted as one cell.
-- As it appears to be best practice to run doubletfinder with unmerged and/or unintegrated data, I ran doubletfinder on each sample individually. This is why I created a different seurat object for each sample in this initial preprocessing stage. 
-- Doubletfinder requires the calculation of two parameters before running: pK and pExp. I utilized the no ground truth method to calculate the pK parameter (neighborhood size), and estimated the pExp for each seurat object/sample using a chart from 10x Genomics that defines approximate multiplet rates per number of cells loaded. 
+- Like the authors, I utilized a tool called doubletfinder to identify and remove potential doublets from my Seurat objects. Doublets are artifacts created when two cells are erroneously sequenced in a single reaction and thus counted as one cell.
+- As it appears to be best practice to run doubletfinder with unmerged and/or unintegrated data, I ran doubletfinder on each sample individually. This is why I created a different Seurat object for each sample in this initial preprocessing stage. 
+- Doubletfinder requires the calculation of two parameters before running: pK and pExp. I utilized the no ground truth method to calculate the pK parameter (neighborhood size), and estimated the pExp for each Seurat object/sample using a chart from 10x Genomics that defines approximate multiplet rates per number of cells loaded. 
 
 - https://kb.10xgenomics.com/hc/en-us/articles/360001378811-What-is-the-maximum-number-of-cells-that-can-be-profiled-
 
 
-- Though the authors’ methodology indicates that they normalized their counts after running doubletfinder rather than before, doubletfinder required me to normalize my counts prior to running doubletfinder. To work around this, I created a new object after running the standard seurat pre-processing workflow (which includes normalization). I ran doubletfinder on this new object, identified the doublets, and then removed them from the original, un-normalized object.
+- Though the authors’ methodology indicates that they normalized their counts after running doubletfinder rather than before, doubletfinder required me to normalize my counts prior to running doubletfinder. To work around this, I created a new object after running the standard Seurat pre-processing workflow (which includes normalization). I ran doubletfinder on this new object, identified the doublets, and then removed them from the original, un-normalized object.
 
 _**Merging**_
-- After running doubletfinder, I then merged the seurat objects for each individual sample into one seurat object.
+- After running doubletfinder, I then merged the Seurat objects for each individual sample into one Seurat object.
 ---
 ### Integration and clustering:
 _**Integration**_
-- To prepare for integration, I re-ran the standard pre-processing workflow as defined above. I visualized the UMAP plots of the object, grouping by patient, sample, and sample type to assess for any bias, and I split the merged seurat object into layers by sample.
+- To prepare for integration, I re-ran the standard pre-processing workflow as defined above. I visualized the UMAP plots of the object, grouping by patient, sample, and sample type to assess for any bias, and I split the merged Seurat object into layers by sample.
 - I regressed out variation due to UMI counts and percent mitochondrial reads.
 - As the authors noted, I selected the top 2000 variable features and used the default 30 dimensions for integration.
 
@@ -68,6 +68,9 @@ _**Clustering**_
 - Though I performed clustering at a range of resolutions for curiosity's sake, I proceeded with analysis with the clustering results achieved at a resolution of 0.8 (as indicated by the authors).
 - UMAP of integrated cells clustered at 0.8 resolution:
 ![post_integration_final](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/e4d05198-a84d-4c21-9239-8a4b49eae362)
+
+- Here are the UMAP plots of the integrated cells clustered at other resolutions:
+![otherres](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/bd936c27-e9f7-47d3-ad5c-82fffc999634)
 
 - To assess for bias before proceeding with marker identification, I then visualized the integrated and clustered UMAP above in a variety of different ways:
   - _Split by sample:_
@@ -112,7 +115,7 @@ _**Marker Identification**_
     - _Fibroblast markers_
     ![fibroblasts_COL1A1_final](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/ec3c055d-ffd1-491f-82fe-0d4ce034fdca)
 
-- Starting with the Single-R annotations and making adjustments based off of the feature plots above, I assigned cluster identities as indicated in the below figure. It is important to note that this annotation is a guesstimate on my part. I understand that I am "working backwards" by looking specifically for markers of cell populations already identified by the authors, and that my annotation process was not particularly systematic, but I wanted to attempt it as an exercise nonetheless. 
+- Starting with the Single-R annotations and making adjustments based off of the feature plots above, I assigned cluster identities as indicated in the below figure. It is important to note that this annotation is an estimate on my part. I understand that I am "working backwards" by looking specifically for markers of cell populations already identified by the authors, and that my annotation process was not particularly systematic, but I wanted to attempt it as an exercise nonetheless. 
 ![acinarendocrine](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/301b1dd6-7dc3-459e-97b3-a7d4dfd6c231)
 
 - Here is my final annotated plot compared to that of the authors (Zhang et al. Figure 1C):
