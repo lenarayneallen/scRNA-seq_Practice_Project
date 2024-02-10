@@ -11,11 +11,19 @@ Here I will provide an overview of this scRNA-seq analysis, attempt to explain m
 
 The data files used for this project are available for download through the Gene Expression Omnibus at the following link: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE197177
 
+I initially found this study as it made the rounds on the pancreatic cancer side of twitter, and I decided to use it for practice analysis due to its small sample size but powerful conclusions. 
 ## Experimental Background: 
 In this study, the authors sought to understand the cellular composition and microenvironment of primary Pancreatic Ductal Adenocarcinoma (PDAC) tumors and PDAC hepatic metastases through the use of scRNA-seq. Eight clinical samples from four patients were analyzed, and the samples derived from each patient are as follows:
 
 ![image](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/5cb378fb-3477-4305-88ee-7ff39aa5802c)
 
+PDAC is a particularly immune evasive cancer, and it is often not responsive to the immune checkpoint inhibitor therapies that have been effective in many other cancer types. The 5-year survival rate is low, often estimated at less than 10%, and resection is often the only curative option. It is often diagnosed at a state of significant disease progression, with paitents often presenting with liver metastasis at the time of diagnosis. 
+
+Sources:
+
+Liu Z, Gou A, Wu X. Liver metastasis of pancreatic cancer: the new choice at the crossroads. Hepatobiliary Surg Nutr. 2023 Feb 28;12(1):88-91. doi: 10.21037/hbsn-22-489. Epub 2023 Jan 16. PMID: 36860262; PMCID: PMC9944539.
+
+Rojas, L.A., Sethna, Z., Soares, K.C. et al. Personalized RNA neoantigen vaccines stimulate T cells in pancreatic cancer. Nature 618, 144–150 (2023). https://doi.org/10.1038/s41586-023-06063-y
 
 ## Author's analysis methods:
 For comparison purposes, here are the methods as described in the Zhang et al. publication: 
@@ -110,10 +118,10 @@ _**Marker Identification**_
 - Here is my final annotated plot compared to that of the authors (Zhang et al. Figure 1C):
 ![ductal cell markers (2)](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/e83f4724-08db-4500-aa82-e52a78f0cbdd)
 
-- From here, I was able to loosely recreate a bar plot from the paper (Zhang et al. Figure 1E) examining the abundance of each cell type by sample condition. Error bars for the pancreatic tumor (PT) and hepatic metastasis (HM) conditions represent the standard error of the mean; there are no error bars for the normal tissue (NT) condition as there is only one normal tissue sample. 
+- From here, I was able to loosely recreate a bar plot from the paper (Zhang et al. Figure 1E) examining the abundance of each cell type by sample condition. Error bars for the pancreatic tumor (PT) and hepatic metastasis (HM) conditions represent the standard error of the mean; there are no error bars for the normal tissue (NT) condition as there is only one normal tissue sample.
+![errorbars](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/88d32249-5871-414d-a67e-7cbf09a69666)
 
-  <img src="https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/abb2dfa8-7531-4ad1-b665-37f0c4fbe27b" width=60% height=60%>
-  <img src="https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/a89a669c-416e-470d-a3a3-b1d4725e2348" width=30% height=30%> 
+![Untitled design](https://github.com/lenarayneallen/Seurat_Practice_Project/assets/124638335/5e64e2f5-6475-4ccb-9449-e68f18e3cbe8)
 
 - While I am unsure of their statistical significance, several trends observed in my plot are consistent with the authors' plot. These trends include:
   - increased abundance of acinar and endocrine cells (termed "secretory cells" in the paper) in the NT sample compared to the PT and HM samples
