@@ -107,7 +107,7 @@ integrated_per_cluster_per_sample <- DimPlot(integrated,
 print(integrated_per_cluster_per_sample)
 
 
-#UMAP visualization
+#UMAP visualization 
 int_umap_by_sample <- DimPlot(object = integrated, reduction = 'umap', group.by = 'sample') + labs(title = "integrated UMAP by sample")
 int_umap_by_patient <- DimPlot(object = integrated, reduction = 'umap', group.by = 'patient') + labs(title = "integrated UMAP by patient")
 print(int_umap_by_sample)
