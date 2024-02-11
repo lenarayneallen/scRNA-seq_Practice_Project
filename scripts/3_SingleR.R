@@ -150,4 +150,3 @@ ggplot(integrated_clustered@meta.data, aes(x = integrated_snn_res.0.8.x, fill = 
 #plot by SingleR cluster at cluster resolution
 DimPlot(integrated_clustered, reduction = 'umap', group.by = 'SingleR.cluster.labels') +
   ggtitle("SingleR predicted identities by cluster")
-  
