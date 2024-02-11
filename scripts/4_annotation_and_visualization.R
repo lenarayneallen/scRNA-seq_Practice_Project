@@ -26,7 +26,7 @@ library(SingleCellExperiment)
 library(BPCells)
 library(RColorBrewer)
 library(rcartocolor)
-
+library(Rmisc)
 ###read in file------------------------------------------------------------------------
 integrated_clustered_final <- readRDS('integrated_clustered_final.RDS')
 
@@ -66,6 +66,13 @@ FeaturePlot(integrated_clustered_final,
             min.cutoff = 'q10',
             label = TRUE)
 
+FeaturePlot(integrated_clustered_final, 
+            reduction = "umap",
+            features = c("CFTR", "TFF1", "MKI67"), 
+            order = TRUE, 
+            min.cutoff = 'q10',
+            label = TRUE) 
+
 #feature plots of known mast cell markers
 FeaturePlot(integrated_clustered_final, 
             reduction = "umap",
@@ -81,20 +88,29 @@ FeaturePlot(integrated_clustered_final,
             min.cutoff = 'q10',
             label = TRUE)
 
+FeaturePlot(integrated_clustered_final, 
+            reduction = "umap",
+            features = c("TPSAB1", "KIT",  "TPSB2", "MS4A2"), 
+            order = TRUE, 
+            min.cutoff = 'q10',
+            label = TRUE) 
+
 #feature plots of known acinar cell markers
 FeaturePlot(integrated_clustered_final, 
             reduction = "umap",
-            features = "PRSS1", 
+            features = c("PRSS1", "KLK1"), 
             order = TRUE, 
+            pt.size = 0.5,
             min.cutoff = 'q10',
             label = TRUE)
 
+#feature plot fo known endocrine cell markers
 FeaturePlot(integrated_clustered_final, 
             reduction = "umap",
-            features = "KLK1", 
+            features = "INS", 
             order = TRUE, 
             min.cutoff = 'q10',
-            label = TRUE)
+            label = FALSE)
 
 #feature plots of known plasma cell markers
 FeaturePlot(integrated_clustered_final, 
@@ -112,7 +128,6 @@ FeaturePlot(integrated_clustered_final,
             min.cutoff = 'q10',
             label = TRUE)
 
-
 ###"MANUAL" ANNOTATION: renaming identities --------------------------------------------
 #Identites were determined by SingleR results and above feature plots of markers
 integrated_clustered_final$orig.cluster <- Idents(integrated_clustered_final)
@@ -122,7 +137,7 @@ integrated_clustered_final <- RenameIdents(object = integrated_clustered_final,
                                      "2" = "Ductal cells",
                                      "3" = "Mac/Mono",
                                      "4" = "Ductal cells",
-                                     "5" = "Acinar cells",
+                                     "5" = "Acinar/Endocrine",
                                      "6" = "Fibroblasts",
                                      "7" = "NK cells",
                                      "8" = "T cells",
@@ -151,7 +166,7 @@ saveRDS(integrated_clustered_final, "integrated_clustered_final_idents.RDS")
 DimPlot(integrated_clustered_final, 
         reduction = "umap",
         label = TRUE, 
-        label.size = 3)
+        label.size = 4)
 
 
 ###FURTHER VISUALIZATION ---------------------------------------------------------------
@@ -165,20 +180,35 @@ table(Idents(integrated_clustered_final))
 
 
 #plot bar plot of cell type abundance by condition
-celltype_v_sampletype <- table(integrated_clustered_final$celltype, integrated_clustered_final$type.x)
-cvs_df_perc <- as.data.frame(celltype_v_sampletype * 100 / rowSums(celltype_v_sampletype))
+celltype_v_sample <- table(integrated_clustered_final$celltype, integrated_clustered_final$sample.x)
+celltype_v_sample_df <- as.data.frame(celltype_v_sample * 100 / rowSums(celltype_v_sample))
 
-names(cvs_df_perc)[names(cvs_df_perc) == "Var1"] <- "celltype"
-names(cvs_df_perc)[names(cvs_df_perc) == "Var2"] <- "condition"
-names(cvs_df_perc)[names(cvs_df_perc) == "Freq"] <- "percent"
+names(celltype_v_sample_df)[names(celltype_v_sample_df) == "Var1"] <- "celltype"
+names(celltype_v_sample_df)[names(celltype_v_sample_df) == "Var2"] <- "sample"
+names(celltype_v_sample_df)[names(celltype_v_sample_df) == "Freq"] <- "percent"
 
-ggplot(cvs_df_perc, aes(x = celltype, y = percent, fill = condition)) +
-  geom_bar(stat = 'identity', position = "dodge") +
+cst <- celltype_v_sample_df %>%
+  mutate(type = case_when(
+      grepl("HM", sample) ~ "HM",
+      grepl("NT", sample) ~ "NT",
+      grepl("PT", sample) ~ "PT"
+    )
+  )
+
+summary <- summarySE(cst, measurevar = "percent", groupvars = c("celltype", "type"))
+
+ggplot(summary, aes(x = celltype, y = percent, fill = type)) +
+  geom_bar(stat = 'identity', position = "dodge") + 
+  geom_errorbar(aes(ymin = percent-se, ymax = percent+se),
+                width = .2,
+                position = position_dodge(.9)) +
   labs(colour = "condition", y = "percentage of cells", x = "cell type") +
   scale_fill_manual(values = c("HM" = "firebrick", "NT" = "royalblue3", "PT" = "tan2")) +
   theme_light() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   ggtitle("cell type abundance by condition")
+
+
 
 #stacked bar plot of cell type % per sample condition
 cvs_df <- as.data.frame(celltype_v_sampletype)
@@ -186,11 +216,11 @@ cvs_df <- as.data.frame(celltype_v_sampletype)
 names(cvs_df)[names(cvs_df) == "Var1"] <- "celltype"
 names(cvs_df)[names(cvs_df) == "Var2"] <- "condition"
 names(cvs_df)[names(cvs_df) == "Freq"] <- "frequency"
-
 ggplot(cvs_df, aes(x = condition, y = frequency, fill = celltype)) +
   geom_bar(stat = 'identity', position = "fill") +
   labs(colour = "cell type", y = "percentage of cells") +
   scale_fill_carto_d(name = "cell type", palette = "Bold") +
   theme_light() +
-  ggtitle("Cell Type % per Sample Condition")
+  ggtitle("Cell Type % per Sample Condition") 
+  
 
